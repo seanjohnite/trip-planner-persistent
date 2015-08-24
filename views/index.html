@@ -20,7 +20,7 @@
               <option value="{{ hotel._id.toString() }}">{{ hotel.name }}</option>
               {% endfor %}
             </select>
-            <button data-type="hotels" class="btn btn-primary btn-circle pull-right">+</button>
+            <button data-type="hotel" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Restaurants</h4>
@@ -29,7 +29,7 @@
               <option value="{{ restaurant._id.toString() }}">{{ restaurant.name }}</option>
               {% endfor %}
             </select>
-            <button data-type="restaurants" class="btn btn-primary btn-circle pull-right">+</button>
+            <button data-type="restaurant" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
           <div>
             <h4>Activities</h4>
@@ -38,7 +38,7 @@
               <option value="{{ activity._id.toString() }}">{{ activity.name }}</option>
               {% endfor %}
             </select>
-            <button data-type="activities" class="btn btn-primary btn-circle pull-right">+</button>
+            <button data-type="activity" class="btn btn-primary btn-circle pull-right">+</button>
           </div>
         </div>
       </div>
@@ -59,17 +59,17 @@
         <div id="itinerary" class="panel-body">
           <div>
             <h4>My Hotel</h4>
-            <ul class="list-group" data-type="hotels">
+            <ul class="list-group" data-type="hotel">
             </ul>
           </div>
           <div>
             <h4>My Restaurants</h4>
-            <ul class="list-group" data-type="restaurants">
+            <ul class="list-group" data-type="restaurant">
             </ul>
           </div>
           <div>
             <h4>My Activities</h4>
-            <ul class="list-group" data-type="activities">
+            <ul class="list-group" data-type="activity">
             </ul>
           </div>
         </div>

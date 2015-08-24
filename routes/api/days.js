@@ -28,8 +28,6 @@ router.get('/:id', function(req, res, next) {
 router.post('/:id/:type', function(req, res, next) {
   // console.log(req.body);
   var type = req.params.type;
-  console.log(type)
-  console.log(req.day[type]);
   if(type === 'hotel') req.day.hotel = req.body.id;
   else req.day[type].push(req.body.id);
 
@@ -42,6 +40,9 @@ router.post('/:id/:type', function(req, res, next) {
 
 router.param('id', function(req, res, next, id) {
   Day.findById(id)
+  .populate('hotel')
+  .populate('restaurant')
+  .populate('activity')
   .then(function(day) {
     req.day = day;
     next();
