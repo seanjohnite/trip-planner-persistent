@@ -138,3 +138,7 @@ h3 {
     vertical-align: middle; }
   #day-title > .remove {
     margin-left: 1em; }
+
+.trips {
+  margin-bottom: 15px;
+  padding: 10px; }

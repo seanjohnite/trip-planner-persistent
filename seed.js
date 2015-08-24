@@ -57,6 +57,9 @@ var data = {
     {name: "Washington Square Park", place: [new Place({address: "1 Washington Sq E", city: "New York", state: "NY", phone: "123-456-7890", location: [40.732204, -73.998649]})], age_range: "All" },
     {name: "Union Square Holiday Market", place: [new Place({address: "Union Sq & W 14th St", city: "New York", state: "NY", phone: "123-456-7890", location: [40.733615, -73.987995]})], age_range: "All" },
     {name: "Strand Bookstore", place: [new Place({address: "828 Broadway", city: "New York", state: "NY", phone: "123-456-7890", location: [40.733274, -73.990870]})], age_range: "All" }
+  ],
+  User: [
+    {name: "The Master Baiter", trips: [{name: "Ze awesome trip", days: []}]}
   ]
 };
 
@@ -66,6 +69,7 @@ mongoose.connection.on('open', function() {
     console.log("Dropped old data, now inserting data");
     Promise.map(Object.keys(data), function(modelName) {
       return Promise.map(data[modelName], function(item) {
+        console.log(item, modelName);
         return models[modelName].create(item);
       });
     }).then(function() {

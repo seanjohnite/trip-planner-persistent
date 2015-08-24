@@ -8,10 +8,6 @@ var daysModule = (function(){
       currentDay,
       attractions = ["hotel", "restaurant", "activity"];
 
-  function firstDay () {
-
-  }
-
   function addDay () {
     var number = days.length + 1;
     $.ajax({
@@ -37,8 +33,11 @@ var daysModule = (function(){
     renderDayButtons();
   }
 
-  function removeCurrentDay () {
-    if (days.length === 1) return;
+  function removeCurrentDay (button) {
+    if (days.length === 1) {
+      button.removeClass('disabled');
+      return;
+    }
     $.ajax({
       url: '/api/days/' + currentDay,
       method: 'DELETE',
@@ -46,6 +45,8 @@ var daysModule = (function(){
         var index = days.indexOf(currentDay);
         days.splice(index, 1);
         switchDay(index);
+        button.removeClass('disabled');
+
       },
       error: function(errorObj) {
         console.error(errorObj.message);
@@ -67,7 +68,7 @@ var daysModule = (function(){
     return '<button class="btn btn-circle day-btn' + (isCurrentDay ? ' current-day' : '') + '">' + (i + 1) + '</button>';
   }
 
-  exports.addAttraction = function(type, attractionId) {
+  exports.addAttraction = function(type, attractionId, button) {
     // console.log(currentDay.id);
 
     // if (currentDay[attraction.type].indexOf(attraction) !== -1) return;
@@ -77,6 +78,7 @@ var daysModule = (function(){
       data: {id: attractionId},
       success: function (responseDay) {
         renderDay(currentDay);
+        button.removeClass('disabled');
       },
       error: function (errorObj) {
         console.error(errorObj.message);
@@ -111,8 +113,8 @@ var daysModule = (function(){
     $.ajax({
       url: '/api/days/' + dayId,
       method: 'GET',
-      cache: false,
       success: function (day) {
+        console.log(day);
         attractions.forEach(function(type){
           var $list = $('#itinerary ul[data-type="' + type + '"]');
           $list.empty();
@@ -175,12 +177,21 @@ var daysModule = (function(){
     loadDays();
     // if(!days[0]) addDay(1);
     $('.day-buttons').on('click', '.new-day-btn', function() {
+      if($(this).hasClass('disabled')) return;
+      $(this).addClass('disabled');
       addDay();
     });
     $('.day-buttons').on('click', 'button:not(.new-day-btn)', function() {
+      if($(this).hasClass('disabled')) return;
+      $(this).addClass('disabled');
       switchDay($(this).index());
     });
-    $('#day-title').on('click', '.remove', removeCurrentDay);
+    $('#day-title').on('click', '.remove', function () {
+      var $button = $(this)
+      if($button.hasClass('disabled')) return;
+      $button.addClass('disabled');
+      removeCurrentDay($button);
+    });
     $('.removeAllDays').on('click', removeDays);
   });
 

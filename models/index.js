@@ -8,5 +8,6 @@ module.exports = {
   Activity: require('./activity'),
   Restaurant: require('./restaurant'),
   Place: require('./place'),
-  Day: require('./day')
+  Day: require('./day'),
+  User: require('./user')
 };

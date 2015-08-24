@@ -34,6 +34,8 @@ app.use(express.static(__dirname + '/public'));
 // serve routes
 app.use(require('./routes'));
 app.use('/api/days', require('./routes/api/days'));
+app.use('/api/attractions', require('./routes/api/attractions'));
+app.use('/api/users', require('./routes/api/users'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -20,7 +20,7 @@ var mapModule = (function(){
   }
 
   exports.drawAttraction = function (attraction) {
-    var coords = attraction.place[0].location,
+    var coords = attraction.loc,
         options = {
           icon: iconPath[attraction.type],
           position: new google.maps.LatLng(coords[0], coords[1]),

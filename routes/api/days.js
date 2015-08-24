@@ -6,11 +6,14 @@ var Activity = models.Activity;
 var Promise = require('bluebird');
 
 router.get('/', function(req,res,next) {
-  Day.find().exec()
+  Day.find()
+  .populate('hotel')
+  .populate('activity')
+  .populate('restaurant')
+  .exec()
   .then(function(days) {
     res.json(days);
-  })
-  // .catch(next);
+  });
 });
 
 router.post('/:number', function(req, res, next) {
@@ -33,10 +36,22 @@ router.post('/:id/:type', function(req, res, next) {
   console.log(req.body);
   var type = req.params.type;
   if(type === 'hotel') req.day.hotel = req.body.id;
-  else req.day[type].push(req.body.id);
+  else {
+    if (!(req.day[type].some(function (attr) {
+      return attr._id.toString() === req.body.id;
+    }))) {
+      req.day[type].push(req.body.id);
+    }
+  }
+
 
   req.day.save()
   .then(function(day) {
+    console.log(day);
+    return day.populate(req.params.type);
+  })
+  .then(function (day) {
+    console.log(day);
     res.json(day);
   })
   // .catch(next);
@@ -54,7 +69,8 @@ router.delete('/:id/hotel/:hotelId', function(req,res, next) {
 router.delete('/:id/restaurant/:restaurantId', function(req,res, next) {
   var dayId = req.params.id;
   var typeId = req.params.restaurantId;
-  req.day.restaurant.pull({_id: typeId})
+  req.day.restaurant.pull({_id: typeId});
+
   req.day.save()
   .then(function() {
     res.end();
