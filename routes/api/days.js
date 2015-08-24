@@ -9,7 +9,8 @@ router.get('/', function(req,res,next) {
   Day.find().exec()
   .then(function(days) {
     res.json(days);
-  });
+  })
+  // .catch(next);
 });
 
 router.post('/:number', function(req, res, next) {
@@ -17,8 +18,11 @@ router.post('/:number', function(req, res, next) {
   .then(function(day) {
     // var id = day._id;
     // res.redirect('/api/days/' + id);
-    res.json(day);
-  });
+    console.log('IS THERE ANYBODY OUT THERE.')
+    return res.json(day);
+
+  })
+  // .catch(next);
 });
 
 router.get('/:id', function(req, res, next) {
@@ -26,7 +30,7 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/:id/:type', function(req, res, next) {
-  // console.log(req.body);
+  console.log(req.body);
   var type = req.params.type;
   if(type === 'hotel') req.day.hotel = req.body.id;
   else req.day[type].push(req.body.id);
@@ -34,8 +38,70 @@ router.post('/:id/:type', function(req, res, next) {
   req.day.save()
   .then(function(day) {
     res.json(day);
+  })
+  // .catch(next);
+});
+
+router.delete('/:id/hotel/:hotelId', function(req,res, next) {
+  var dayId = req.params.id;
+  var typeId = req.params.hotelId;
+  req.day.hotel = null;
+  req.day.save().then(function(day) {
+    res.json(day);
+  }).catch(next);
+});
+
+router.delete('/:id/restaurant/:restaurantId', function(req,res, next) {
+  var dayId = req.params.id;
+  var typeId = req.params.restaurantId;
+  req.day.restaurant.pull({_id: typeId})
+  req.day.save()
+  .then(function() {
+    res.end();
+  })
+  // Day.update(
+  //   {_id: dayId},
+  //   {$pull: {restaurant: {_id: typeId}}
+  // }).exec().then(function(day) {
+  //   res.end();
+  // })
+  // .catch(next);
+});
+
+router.delete('/:id', function(req, res, next) {
+  Day.remove({_id: req.params.id})
+  .then(function() {
+    res.end();
   });
 });
+
+router.delete('/:id/activity/:activityId', function(req,res, next) {
+
+  var dayId = req.params.id;
+  var typeId = req.params.activityId;
+  console.log(dayId);
+  console.log(typeId);
+  req.day.activity.pull({_id: typeId})
+  req.day.save()
+  .then(function() {
+    res.end();
+  })
+  // Day.update(
+  //   {_id: dayId},
+  //   {$pull: {activity: {_id: typeId}}
+  // }, function(err) {
+  //   if(err) return next(err);
+  //   res.end();
+  // })
+  // .catch(next);
+});
+
+router.delete('/', function(req, res, next) {
+  Day.remove({}).then(function() {
+    res.end();
+  })
+  // .catch(next);
+})
 
 
 router.param('id', function(req, res, next, id) {
